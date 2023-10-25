@@ -1,6 +1,6 @@
 @import url("./bootstrapOverride.css");
 :root {
-  --color-primary: #0072ed;
+  --color-primary: #1B34FB;
   --color-secondary: #6c757d;
   --color-success: #3fb618;
   --color-info: #4d61fc;
@@ -30,13 +30,17 @@
   --head-inactive: #909090;
   --logo-path: "./logo.svg";
 
-  --logo-width: 50px;
+  --logo-width: 29px;
+  --logo-height: 29px;
+  --logo-left: 140px;
   --appname-margin-left: 0px;
-  --appname-margin-right: 0px;
-  --appname-margin-top: 0px;
-  --appname-margin-bottom: 0px;
+  --appname-margin-right: 641px;
+  --appname-margin-top: 21px;
+  --appname-margin-bottom: 14px;
+
 
   --navbar-items-font-size: 16px;
+  --navbar-active-tab-font-size: 18px;
   --navbar-items-font-weight: 600;
 
   --navbar-background: var(--color-white);
@@ -45,6 +49,8 @@
   --button-primary-background: var(--color-primary);
   --navbar-app-name: var(--color-black);
   --navbar-logo-width: var(--logo-width);
+  --navbar-logo-height: var(--logo-height);
+  --navbar-logo-margin-left: var(--logo-left);
 
   --navbar-logo-path: var(--logo-path);
 }

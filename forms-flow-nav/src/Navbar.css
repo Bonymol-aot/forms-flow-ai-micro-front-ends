@@ -3,7 +3,7 @@
 }
 
 .logo {
-  height: 1.9em;
+  height: 1.9rem;
 }
 h4 {
   font-size: 1.2rem;
@@ -19,6 +19,7 @@ h5,
 
 .navbar {
   background-color: var(--navbar-background);
+  height: 64px;
 }
 .nav-dropdown .dropdown-menu {
   width: 15rem;
@@ -43,9 +44,13 @@ h5,
 }
 .inactive-tab {
   color: var(--navbar-items) !important;
+  font-size: var(--navbar-items-font-size) !important;
 }
 .active-tab {
   color: var(--navbar-active) !important;
+  border-bottom: 3px solid var(--navbar-active) !important;
+  font-weight: 400;
+  font-size: var(--navbar-active-tab-font-size) !important;;
 }
 
 .active-tab-dropdown > #dashboard-dropdown {
@@ -88,11 +93,9 @@ header nav {
 }
 
 .custom-app-name {
-  font-size: 30px;
-  font-weight: 600;
+  font-size: 25px;
+  font-weight: 400;
   color: var(--navbar-app-name);
-  margin-left: var(--appname-margin-left);
-  margin-right: var(--appname-margin-right);
   margin-top: var(--appname-margin-top);
   margin-bottom: var(--appname-margin-bottom);
 }
@@ -115,6 +118,8 @@ header nav {
 }
 .custom-logo{
   width: var(--navbar-logo-width);
+  margin-top: var(--appname-margin-top);
+  margin-bottom: var(--appname-margin-bottom);
 }
 @media (max-width: 768px) {
   .head-item {
