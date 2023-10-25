@@ -1,4 +1,7 @@
-@import url("./bootstrapOverride.css");
+@import "./utils/cursor.scss";
+@import "./utils/overflow.scss";
+@import "./bootstrapOverride.scss";
+
 :root {
   --color-primary: #1B34FB;
   --color-secondary: #6c757d;
