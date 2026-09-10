@@ -27,6 +27,19 @@ const API = {
     GET_APPLICATION_HISTORY_API: `${WEB_BASE_URL}/application/<application_id>/history`,
     BUNDLE_EXECUTE_RULE:`${WEB_BASE_URL}/form/<mapper_id>/bundles/execute-rules`,
     CHECKLIST: `${WEB_BASE_URL}/user/checklist`,
+    // m8flow tasks come from forms-flow-api, not Camunda: the engine scopes the
+    // list to the calling user, so the request must carry their own token.
+    M8FLOW_TASKS: `${WEB_BASE_URL}/tasks/m8flow`,
+    // Claim/unclaim go to forms-flow-api rather than to the engine: m8flow has no
+    // claim of its own (its task-assign only *adds* potential owners, and only
+    // while the process instance is suspended), so forms-flow holds the
+    // assignment. <task_id> is "<process_instance_id>/<task_guid>".
+    CLAIM_M8FLOW_TASK: `${WEB_BASE_URL}/tasks/m8flow/<task_id>/claim`,
+    UNCLAIM_M8FLOW_TASK: `${WEB_BASE_URL}/tasks/m8flow/<task_id>/unclaim`,
+    // Approve/reject. Separate from the Camunda completion route because an
+    // m8flow task id carries a slash, and because the outcome alone is the
+    // input here -- the submission is reviewed read-only.
+    COMPLETE_M8FLOW_TASK: `${WEB_BASE_URL}/tasks/m8flow/<task_id>/complete`,
  }
 
 export default API;

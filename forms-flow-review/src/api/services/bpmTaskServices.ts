@@ -178,3 +178,66 @@ export const getApplicationHistory = (applicationId, ...rest) => {
       });
   };
 };
+
+
+/**
+ * m8flow task list.
+ *
+ * Unlike the Camunda list this is a plain GET against forms-flow-api rather than
+ * a Camunda filter POST: m8flow has no filter concept, and it authorises the list
+ * itself from the caller's token, returning only the tasks whose BPMN lane maps
+ * to a group the user belongs to.
+ */
+export const fetchM8flowTaskList = (group?: string) => {
+  const params = new URLSearchParams();
+  if (group) params.append("group", group);
+  const query = params.toString();
+  return RequestService.httpGETRequest(
+    query ? `${API.M8FLOW_TASKS}?${query}` : API.M8FLOW_TASKS
+  );
+};
+
+/**
+ * Claim an m8flow task for a user, defaulting to the caller.
+ *
+ * Unlike the Camunda claim this goes to forms-flow-api, which holds the
+ * assignment itself -- m8flow has no claim to call. The payload key is `userId`
+ * to match the Camunda call, so both engines are driven the same way.
+ *
+ * Rejects with 409 when someone else already holds the task; the caller decides
+ * whether to unclaim first (the Camunda list does the same two-step to
+ * reassign).
+ */
+export const claimM8flowTask = (taskId: string, userId?: string) => {
+  const url = replaceUrl(API.CLAIM_M8FLOW_TASK, "<task_id>", taskId);
+  return RequestService.httpPOSTRequest(url, userId ? { userId } : {});
+};
+
+/**
+ * Release the claim on an m8flow task.
+ *
+ * Succeeds even when nobody holds it, so a stale row in the table cannot leave
+ * the list stuck showing an assignee that is already gone.
+ */
+export const unclaimM8flowTask = (taskId: string) => {
+  const url = replaceUrl(API.UNCLAIM_M8FLOW_TASK, "<task_id>", taskId);
+  return RequestService.httpPOSTRequest(url, {});
+};
+
+/**
+ * Approve or reject an m8flow task, advancing the workflow.
+ *
+ * `action` goes to the engine as the variable an approval gateway branches on
+ * (`action == 'Approved'` / `'Rejected'`) -- the same contract the no-code
+ * designer generates for Camunda.
+ *
+ * Rejects with 409 when the task is claimed by someone else.
+ */
+export const completeM8flowTask = (
+  taskId: string,
+  action: "Approved" | "Rejected",
+  variables?: Record<string, unknown>
+) => {
+  const url = replaceUrl(API.COMPLETE_M8FLOW_TASK, "<task_id>", taskId);
+  return RequestService.httpPOSTRequest(url, { action, ...(variables ? { variables } : {}) });
+};

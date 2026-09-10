@@ -37,6 +37,7 @@ import { useTranslation } from "react-i18next";
 import TaskListDropdownItems from "./TaskFilterDropdown";
 import { RootState } from "../../reducers";
 import TaskListTable from "./TasklistTable";
+import M8flowTaskList from "./M8flowTaskList";
 import { HelperServices } from "@formsflow/service";
 import AttributeFilterDropdown from "./AttributeFilterDropdown";
 import { createReqPayload ,sortableKeysSet} from "../../helper/taskHelper";
@@ -49,6 +50,10 @@ import { navigateToTaskListingFromReviewWithHistory, getRedirectUrl } from "@for
 const TaskList = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  // Which workflow engine's tasks to show. Camunda tasks come from the Camunda
+  // filter API; m8flow tasks come from forms-flow-api and are authorised per
+  // user by m8flow itself, so the two lists cannot be merged into one query.
+  const [taskEngine, setTaskEngine] = useState<"camunda" | "m8flow">("camunda");
   const navigate = useNavigate();
   const location = useLocation();
   const { tenantId } = useParams();
@@ -384,8 +389,28 @@ const TaskList = () => {
       selected={isAssigned}
     />
                 </div>
+                <div className="section-seperation-left ms-auto">
+                  <V8CustomButton
+                    variant={taskEngine === "camunda" ? "primary" : "secondary"}
+                    onClick={() => setTaskEngine("camunda")}
+                    label={t("Camunda")}
+                    selected={taskEngine === "camunda"}
+                    dataTestId="task-engine-camunda"
+                  />
+                  <V8CustomButton
+                    variant={taskEngine === "m8flow" ? "primary" : "secondary"}
+                    onClick={() => setTaskEngine("m8flow")}
+                    label={t("m8flow")}
+                    selected={taskEngine === "m8flow"}
+                    dataTestId="task-engine-m8flow"
+                  />
+                </div>
               </div>
-         {viewTasks && <div className="body-section custom-scroll"><TaskListTable /></div>}
+         {viewTasks && (
+           <div className="body-section custom-scroll">
+             {taskEngine === "m8flow" ? <M8flowTaskList /> : <TaskListTable />}
+           </div>
+         )}
     </>
   );
 };
